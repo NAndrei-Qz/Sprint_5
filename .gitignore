@@ -1,0 +1,29 @@
+venv/
+
+*.pyc
+
+__pycache__/
+
+*.log
+
+*.tmp
+*.swp
+*.swo
+
+.idea/
+.vscode/
+
+Binary Skeletons/
+DLLs/
+
+site-packages/
+
+Scratches and Consoles/
+
+*.bak
+
+*.py[co]
+*.coverage
+.coverage
+.pytest_cache/
+.hypothesis/
