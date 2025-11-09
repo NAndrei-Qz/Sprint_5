@@ -5,6 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.common.exceptions import TimeoutException
 from data import TestData
+from helpers import GenerationData
 
 
 class TestCreateAd:
@@ -23,7 +24,7 @@ class TestCreateAd:
         assert auth_window.is_displayed(), "Окно с просьбой авторизоваться не появилось"
         assert text_in_window == "Чтобы разместить объявление, авторизуйтесь", "Сообщение с просьбой авторизоваться не совпадает с ожидаемым результатом"
 
-    def test_create_ad_after_auth(self, driver, data_for_create_ad):
+    def test_create_ad_after_auth(self, driver):
         # 1. Ждем появление кнопки вход и регистрация и кликаем на нее
         WebDriverWait(driver, 5).until(EC.visibility_of_element_located(MainPageLocators.LOGIN_AND_REG_BUTTON))
         driver.find_element(*MainPageLocators.LOGIN_AND_REG_BUTTON).click()
@@ -44,14 +45,14 @@ class TestCreateAd:
 
         # 6. Ждем появление элементов на странице создания объявления и заполняем
         WebDriverWait(driver, 5).until(EC.visibility_of_element_located(CreateAdPageLocators.AD_NAME_INPUT))
-        driver.find_element(*CreateAdPageLocators.AD_NAME_INPUT).send_keys(data_for_create_ad["ad_name"])
+        driver.find_element(*CreateAdPageLocators.AD_NAME_INPUT).send_keys(GenerationData.AD_NAME)
         driver.find_element(*CreateAdPageLocators.DROP_DOWN_MENU_CATEGORY).click()
         driver.find_element(*CreateAdPageLocators.DROP_DOWN_MENU_HOBBI).click()
         driver.find_element(*CreateAdPageLocators.RADIO_BUTTON_NEW).click()
         driver.find_element(*CreateAdPageLocators.DROP_DOWN_MENU_CITY).click()
         driver.find_element(*CreateAdPageLocators.DROP_DOWN_MENU_EKB).click()
-        driver.find_element(*CreateAdPageLocators.DESCRIPTION_INPUT).send_keys(data_for_create_ad["ad_description"])
-        driver.find_element(*CreateAdPageLocators.PRICE_INPUT).send_keys(data_for_create_ad["ad_price"])
+        driver.find_element(*CreateAdPageLocators.DESCRIPTION_INPUT).send_keys(GenerationData.AD_DESCRIPTION)
+        driver.find_element(*CreateAdPageLocators.PRICE_INPUT).send_keys(GenerationData.AD_PRICE)
 
         # 7. Отправляем форму и ждём перехода на главную страницу (ждем появление строки поиска)
         driver.find_element(*CreateAdPageLocators.AD_POST_BUTTON).click()
@@ -78,4 +79,4 @@ class TestCreateAd:
         elements_list = driver.find_elements(*ProfilePageLocators.MY_ADDED_CARDS)
         cards_name_list = [element.text for element in elements_list]
 
-        assert data_for_create_ad["ad_name"] in cards_name_list, "В разделе Мои объявления отсутствует созданное объявление"
+        assert GenerationData.AD_NAME in cards_name_list, "В разделе Мои объявления отсутствует созданное объявление"

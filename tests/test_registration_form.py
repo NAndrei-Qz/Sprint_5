@@ -4,10 +4,11 @@ from locators import MainPageLocators, RegistrationPageLocators, LoginPageLocato
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 from data import TestData
+from helpers import GenerationData
 
 
 class TestRegistrationNewUser:
-    def test_user_can_register(self, driver, registration_data):
+    def test_user_can_register(self, driver):
         # 1. Ждем появление кнопки вход и регистрация и кликаем на нее
         WebDriverWait(driver, 5).until(EC.visibility_of_element_located(MainPageLocators.LOGIN_AND_REG_BUTTON))
         driver.find_element(*MainPageLocators.LOGIN_AND_REG_BUTTON).click()
@@ -18,15 +19,15 @@ class TestRegistrationNewUser:
 
         # 3. Ожидание окна регистрации и ввод данных регистрации
         WebDriverWait(driver, 5).until(EC.visibility_of_element_located(RegistrationPageLocators.CREATE_ACCOUNT_BUTTON))
-        driver.find_element(*RegistrationPageLocators.REG_EMAIL_INPUT).send_keys(registration_data["email"])
-        driver.find_element(*RegistrationPageLocators.REG_PASSWORD_INPUT).send_keys(registration_data["password"])
-        driver.find_element(*RegistrationPageLocators.SUBMIT_REG_PASSWORD_INPUT).send_keys(registration_data["password"])
+        driver.find_element(*RegistrationPageLocators.REG_EMAIL_INPUT).send_keys(GenerationData.EMAIL)
+        driver.find_element(*RegistrationPageLocators.REG_PASSWORD_INPUT).send_keys(GenerationData.PASSWORD)
+        driver.find_element(*RegistrationPageLocators.SUBMIT_REG_PASSWORD_INPUT).send_keys(GenerationData.PASSWORD)
 
         # 4. Отправка формы
         driver.find_element(*RegistrationPageLocators.CREATE_ACCOUNT_BUTTON).click()
 
         # 5. Ожидание появления элементов профиля
-        WebDriverWait(driver, 5).until(EC.visibility_of_element_located(MainPageLocators.USER_AVATAR_BUTTON))
+        WebDriverWait(driver, 10).until(EC.visibility_of_element_located(MainPageLocators.USER_AVATAR_BUTTON))
 
         # 6. Сбор данных для подтверждения регистрации
         avatar_class = driver.find_element(*MainPageLocators.USER_AVATAR_BUTTON).get_attribute("class")
@@ -78,7 +79,7 @@ class TestRegistrationNewUser:
         WebDriverWait(driver, 5).until(EC.visibility_of_element_located(LoginPageLocators.LOGIN_WINDOW))
         driver.find_element(*LoginPageLocators.NEW_ACCOUNT_BUTTON).click()
 
-        # 3. Ждем появление окна регистрации и вводим данные существующего пользователя, полученные из фикстуры
+        # 3. Ждем появление окна регистрации и вводим данные существующего пользователя
         WebDriverWait(driver, 5).until(EC.visibility_of_element_located(RegistrationPageLocators.CREATE_ACCOUNT_BUTTON))
         driver.find_element(*RegistrationPageLocators.REG_EMAIL_INPUT).send_keys(TestData.REGISTERED_USER_EMAIL)
         driver.find_element(*RegistrationPageLocators.REG_PASSWORD_INPUT).send_keys(TestData.REGISTERED_USER_PASSWORD)
